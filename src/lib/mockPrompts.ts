@@ -1,0 +1,193 @@
+import { Prompt } from "./types";
+
+// M1~M2 단계용 목업 데이터. M3에서 Supabase 실제 데이터로 교체 예정.
+// 이미지는 picsum.photos 랜덤 플레이스홀더 (seed로 고정).
+const img = (seed: string, w: number, h: number) =>
+  `https://picsum.photos/seed/${seed}/${w}/${h}`;
+
+export const mockPrompts: Prompt[] = [
+  {
+    id: "1",
+    title: "네온 사이버펑크 도시 야경",
+    body: "a sprawling cyberpunk city at night, neon signs reflecting on wet streets, flying cars, cinematic lighting, ultra detailed, 8k --ar 2:3 --style raw",
+    description:
+      "비 내린 밤거리의 네온 사이버펑크 도시를 그릴 때 쓰는 프롬프트예요. 끝의 --ar 2:3 은 세로 비율, --style raw 는 사실적인 질감을 줍니다. 'neon signs', 'flying cars' 부분을 원하는 요소로 바꿔보세요.",
+    category: "디자인/이미지",
+    model: "Midjourney",
+    imageUrl: img("cyber", 600, 900),
+    aspect: "portrait",
+    tags: ["사이버펑크", "도시", "야경"],
+    author: { name: "민지", avatarUrl: img("av1", 80, 80) },
+    likes: 1243,
+    saves: 892,
+  },
+  {
+    id: "2",
+    title: "수채화 느낌의 고양이 일러스트",
+    body: "cute cat sitting by the window, soft watercolor illustration, pastel colors, gentle morning light, children's book style",
+    description:
+      "동화책 삽화 같은 부드러운 수채화 일러스트를 만드는 프롬프트입니다. 'cat'을 다른 동물로 바꾸면 같은 화풍으로 시리즈를 만들 수 있어요. 'pastel colors'를 빼면 색감이 더 진해집니다.",
+    category: "디자인/이미지",
+    model: "DALL·E 3",
+    imageUrl: img("cat", 600, 600),
+    aspect: "square",
+    tags: ["수채화", "고양이", "일러스트"],
+    author: { name: "해든", avatarUrl: img("av2", 80, 80) },
+    likes: 980,
+    saves: 540,
+  },
+  {
+    id: "3",
+    title: "미니멀 제품 촬영 스튜디오컷",
+    body: "minimalist product photography of a perfume bottle, soft studio lighting, beige background, subtle shadows, commercial look, high resolution",
+    description:
+      "쇼핑몰 상세페이지나 광고에 쓸 깔끔한 제품 컷을 만드는 프롬프트예요. 'perfume bottle'을 판매하는 제품명으로 바꾸고, 'beige background'로 배경색을 조정하세요.",
+    category: "업무/생산성",
+    model: "Midjourney",
+    imageUrl: img("product", 600, 750),
+    aspect: "portrait",
+    tags: ["제품사진", "미니멀", "스튜디오"],
+    author: { name: "서윤", avatarUrl: img("av3", 80, 80) },
+    likes: 756,
+    saves: 611,
+  },
+  {
+    id: "4",
+    title: "판타지 숲속 요정 마을",
+    body: "a hidden fairy village inside a giant mushroom forest, glowing lanterns, magical atmosphere, dreamy fog, detailed fantasy art",
+    description:
+      "게임 배경이나 동화 삽화로 좋은 환상적인 요정 마을 프롬프트입니다. 'glowing lanterns', 'dreamy fog' 같은 분위기 단어가 몽환적인 느낌을 좌우해요.",
+    category: "재미/캐릭터",
+    model: "Stable Diffusion",
+    imageUrl: img("fairy", 600, 800),
+    aspect: "portrait",
+    tags: ["판타지", "숲", "요정"],
+    author: { name: "도윤", avatarUrl: img("av4", 80, 80) },
+    likes: 1520,
+    saves: 1102,
+  },
+  {
+    id: "5",
+    title: "레트로 80년대 신스웨이브 포스터",
+    body: "retro 1980s sports car, synthwave sunset, grid horizon, bold magenta and cyan, vintage poster aesthetic",
+    description:
+      "80년대 복고풍 신스웨이브 포스터를 만드는 프롬프트예요. 'sports car'를 다른 소재로 바꿔도 같은 레트로 색감(마젠타+시안)이 유지됩니다.",
+    category: "디자인/이미지",
+    model: "Midjourney",
+    imageUrl: img("retro", 600, 600),
+    aspect: "square",
+    tags: ["레트로", "자동차", "신스웨이브"],
+    author: { name: "지호", avatarUrl: img("av5", 80, 80) },
+    likes: 643,
+    saves: 388,
+  },
+  {
+    id: "6",
+    title: "따뜻한 북유럽 거실 인테리어",
+    body: "cozy scandinavian living room, warm wooden tones, large windows, plants, soft natural light, interior design magazine photo",
+    description:
+      "인테리어 참고 이미지나 무드보드용으로 좋은 북유럽풍 거실 프롬프트입니다. 'living room'을 'bedroom', 'kitchen' 등으로 바꿔 공간별로 뽑아보세요.",
+    category: "취미/일상",
+    model: "DALL·E 3",
+    imageUrl: img("interior", 600, 900),
+    aspect: "portrait",
+    tags: ["인테리어", "북유럽", "거실"],
+    author: { name: "하린", avatarUrl: img("av6", 80, 80) },
+    likes: 834,
+    saves: 702,
+  },
+  {
+    id: "7",
+    title: "우주를 떠다니는 고래",
+    body: "a giant whale floating through space among nebulae and stars, surreal, ethereal, cosmic colors, highly detailed digital painting",
+    description:
+      "초현실적인 분위기의 디지털 페인팅 프롬프트예요. 'whale'을 다른 동물로 바꾸면 우주를 떠다니는 시리즈를 만들 수 있습니다.",
+    category: "재미/캐릭터",
+    model: "Stable Diffusion",
+    imageUrl: img("whale", 600, 700),
+    aspect: "landscape",
+    tags: ["우주", "초현실", "고래"],
+    author: { name: "유나", avatarUrl: img("av7", 80, 80) },
+    likes: 2104,
+    saves: 1699,
+  },
+  {
+    id: "8",
+    title: "감성적인 브런치 음식 사진",
+    body: "gourmet brunch plate, avocado toast and poached egg, overhead shot, natural light, food blog style, appetizing and fresh",
+    description:
+      "음식 블로그나 메뉴판에 쓸 먹음직스러운 사진을 만드는 프롬프트입니다. 'overhead shot'(위에서 찍기)을 'close-up'으로 바꾸면 클로즈업 컷이 나와요.",
+    category: "취미/일상",
+    model: "Midjourney",
+    imageUrl: img("food", 600, 750),
+    aspect: "portrait",
+    tags: ["음식", "플레이팅", "브런치"],
+    author: { name: "건우", avatarUrl: img("av8", 80, 80) },
+    likes: 567,
+    saves: 421,
+  },
+  {
+    id: "9",
+    title: "픽셀 아트 게임 배경",
+    body: "16-bit pixel art forest level, parallax background, warm sunset palette, retro game aesthetic, crisp pixels",
+    description:
+      "레트로 게임 느낌의 픽셀아트 배경 프롬프트예요. 'forest level'을 'cave', 'city' 등으로 바꿔 스테이지별 배경을 만들 수 있습니다.",
+    category: "재미/캐릭터",
+    model: "Stable Diffusion",
+    imageUrl: img("pixel", 600, 500),
+    aspect: "landscape",
+    tags: ["픽셀아트", "게임", "배경"],
+    author: { name: "시우", avatarUrl: img("av9", 80, 80) },
+    likes: 712,
+    saves: 503,
+  },
+  {
+    id: "10",
+    title: "몽환적인 수중 세계",
+    body: "underwater dreamscape, bioluminescent jellyfish, deep blue gradients, rays of light piercing water, serene and magical",
+    description:
+      "빛나는 해파리가 떠다니는 몽환적인 수중 이미지 프롬프트입니다. 'bioluminescent jellyfish'(빛나는 해파리)가 분위기의 핵심이에요.",
+    category: "디자인/이미지",
+    model: "Midjourney",
+    imageUrl: img("ocean", 600, 850),
+    aspect: "portrait",
+    tags: ["수중", "몽환", "해파리"],
+    author: { name: "채원", avatarUrl: img("av10", 80, 80) },
+    likes: 1340,
+    saves: 988,
+  },
+  {
+    id: "11",
+    title: "빈티지 카페 간판 로고",
+    body: "vintage coffee shop logo, hand-drawn lettering, warm brown and cream, rustic emblem style, badge design",
+    description:
+      "가게 로고나 브랜드 엠블럼을 만들 때 쓰는 프롬프트예요. 'coffee shop'을 업종으로 바꾸고, 색상 단어(warm brown and cream)를 브랜드 색으로 교체하세요.",
+    category: "업무/생산성",
+    model: "DALL·E 3",
+    imageUrl: img("logo", 600, 600),
+    aspect: "square",
+    tags: ["로고", "빈티지", "카페"],
+    author: { name: "예진", avatarUrl: img("av11", 80, 80) },
+    likes: 445,
+    saves: 356,
+  },
+  {
+    id: "12",
+    title: "눈 내리는 일본 온천 마을",
+    body: "snowy japanese onsen town at dusk, steam rising, warm lantern glow, traditional wooden buildings, peaceful winter scene",
+    description:
+      "여행 무드보드나 배경화면으로 좋은 겨울 온천 마을 프롬프트입니다. 'at dusk'(해질녘)를 'at night', 'in the morning'으로 바꿔 시간대를 조정하세요.",
+    category: "취미/일상",
+    model: "Midjourney",
+    imageUrl: img("onsen", 600, 800),
+    aspect: "portrait",
+    tags: ["겨울", "일본", "온천"],
+    author: { name: "준서", avatarUrl: img("av12", 80, 80) },
+    likes: 1876,
+    saves: 1433,
+  },
+];
+
+export function getPromptById(id: string): Prompt | undefined {
+  return mockPrompts.find((p) => p.id === id);
+}
