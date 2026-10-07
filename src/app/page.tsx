@@ -1,36 +1,70 @@
 import Link from "next/link";
 import Header from "@/components/Header";
 import PromptCard from "@/components/PromptCard";
-import { getPrompts, getSavedPromptIds } from "@/lib/prompts";
+import { getPrompts, getSavedPromptIds, getLikedPromptIds } from "@/lib/prompts";
+import type { SortOption } from "@/lib/prompts";
 import { ALL, CATEGORY_CHIPS } from "@/lib/categories";
 
 export default async function Home({
   searchParams,
 }: {
-  searchParams: Promise<{ cat?: string }>;
+  searchParams: Promise<{ cat?: string; sort?: string }>;
 }) {
-  const { cat } = await searchParams;
+  const { cat, sort } = await searchParams;
   const active = cat && CATEGORY_CHIPS.includes(cat) ? cat : ALL;
+  const sortOpt: SortOption = sort === "popular" ? "popular" : "latest";
 
-  const [prompts, savedIds] = await Promise.all([
-    getPrompts(active),
+  const [prompts, savedIds, likedIds] = await Promise.all([
+    getPrompts(active, sortOpt),
     getSavedPromptIds(),
+    getLikedPromptIds(),
   ]);
+
+  // 칩/정렬 링크에서 현재 선택값을 유지하기 위한 쿼리 조합
+  const buildHref = (nextCat: string, nextSort: SortOption) => {
+    const params = new URLSearchParams();
+    if (nextCat !== ALL) params.set("cat", nextCat);
+    if (nextSort !== "latest") params.set("sort", nextSort);
+    const qs = params.toString();
+    return qs ? `/?${qs}` : "/";
+  };
 
   return (
     <>
       <Header />
+
+      {/* 정렬 탭 (최신 / 인기) */}
+      <div className="mx-auto max-w-screen-2xl px-4 pt-4">
+        <div className="flex gap-2">
+          {([
+            ["latest", "최신"],
+            ["popular", "🔥 인기"],
+          ] as [SortOption, string][]).map(([key, label]) => (
+            <Link
+              key={key}
+              href={buildHref(active, key)}
+              scroll={false}
+              className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
+                sortOpt === key
+                  ? "bg-rose-600 text-white"
+                  : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700"
+              }`}
+            >
+              {label}
+            </Link>
+          ))}
+        </div>
+      </div>
 
       {/* 카테고리 칩 줄 */}
       <div className="mx-auto max-w-screen-2xl px-4 py-4">
         <div className="flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {CATEGORY_CHIPS.map((c) => {
             const isActive = c === active;
-            const href = c === ALL ? "/" : `/?cat=${encodeURIComponent(c)}`;
             return (
               <Link
                 key={c}
-                href={href}
+                href={buildHref(c, sortOpt)}
                 scroll={false}
                 className={`shrink-0 rounded-full px-4 py-2 text-sm font-semibold transition ${
                   isActive
@@ -50,7 +84,12 @@ export default async function Home({
         {prompts.length > 0 ? (
           <div className="columns-2 gap-4 sm:columns-3 lg:columns-4 xl:columns-5">
             {prompts.map((p) => (
-              <PromptCard key={p.id} prompt={p} saved={savedIds.has(p.id)} />
+              <PromptCard
+                key={p.id}
+                prompt={p}
+                saved={savedIds.has(p.id)}
+                liked={likedIds.has(p.id)}
+              />
             ))}
           </div>
         ) : (

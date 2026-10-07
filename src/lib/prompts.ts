@@ -43,15 +43,27 @@ function filterMock(category?: string): Prompt[] {
   return mockPrompts.filter((p) => p.category === category);
 }
 
-/** 피드용 프롬프트 목록 (카테고리 필터 선택) */
-export async function getPrompts(category?: string): Promise<Prompt[]> {
-  if (!isSupabaseConfigured()) return filterMock(category);
+export type SortOption = "latest" | "popular";
+
+/** 피드용 프롬프트 목록 (카테고리 필터 + 정렬 선택) */
+export async function getPrompts(
+  category?: string,
+  sort: SortOption = "latest"
+): Promise<Prompt[]> {
+  if (!isSupabaseConfigured()) {
+    const list = filterMock(category);
+    return sort === "popular"
+      ? [...list].sort((a, b) => b.likes - a.likes)
+      : list;
+  }
 
   const supabase = await createClient();
-  let query = supabase
-    .from("prompts")
-    .select("*")
-    .order("created_at", { ascending: false });
+  let query = supabase.from("prompts").select("*");
+
+  query =
+    sort === "popular"
+      ? query.order("likes", { ascending: false })
+      : query.order("created_at", { ascending: false });
 
   if (category && category !== ALL) query = query.eq("category", category);
 
@@ -61,6 +73,24 @@ export async function getPrompts(category?: string): Promise<Prompt[]> {
     return filterMock(category);
   }
   return (data as PromptRow[]).map(rowToPrompt);
+}
+
+/** 현재 로그인 사용자가 좋아요한 프롬프트 id 집합 */
+export async function getLikedPromptIds(): Promise<Set<string>> {
+  if (!isSupabaseConfigured()) return new Set();
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return new Set();
+
+  const { data } = await supabase
+    .from("likes")
+    .select("prompt_id")
+    .eq("user_id", user.id);
+
+  return new Set((data ?? []).map((r) => r.prompt_id as string));
 }
 
 /** 현재 로그인 사용자가 저장한 프롬프트 id 집합 (저장 버튼 상태 표시용) */

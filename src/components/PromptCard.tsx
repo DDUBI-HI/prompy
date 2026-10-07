@@ -4,16 +4,20 @@ import { useState } from "react";
 import Link from "next/link";
 import { Prompt } from "@/lib/types";
 import { useSavePrompt } from "@/lib/useSavePrompt";
+import { useLikePrompt } from "@/lib/useLikePrompt";
 
 export default function PromptCard({
   prompt,
   saved: initialSaved = false,
+  liked: initialLiked = false,
 }: {
   prompt: Prompt;
   saved?: boolean;
+  liked?: boolean;
 }) {
   const [copied, setCopied] = useState(false);
   const { saved, loading, toggle } = useSavePrompt(prompt.id, initialSaved);
+  const like = useLikePrompt(prompt.id, initialLiked, prompt.likes);
 
   async function handleCopy(e: React.MouseEvent) {
     e.preventDefault();
@@ -90,12 +94,26 @@ export default function PromptCard({
               {prompt.author.name}
             </span>
           </div>
-          <span className="flex items-center gap-1 text-xs text-neutral-500">
-            <svg className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor" aria-hidden>
+          <button
+            onClick={like.toggle}
+            disabled={like.loading}
+            aria-label="좋아요"
+            className={`flex items-center gap-1 text-xs transition hover:scale-110 disabled:opacity-60 ${
+              like.liked ? "text-rose-600" : "text-neutral-500 hover:text-rose-500"
+            }`}
+          >
+            <svg
+              className="h-4 w-4"
+              viewBox="0 0 20 20"
+              fill={like.liked ? "currentColor" : "none"}
+              stroke="currentColor"
+              strokeWidth={1.6}
+              aria-hidden
+            >
               <path d="M10 17.5 3.8 11.3a3.9 3.9 0 0 1 5.5-5.5l.7.7.7-.7a3.9 3.9 0 1 1 5.5 5.5L10 17.5Z" />
             </svg>
-            {prompt.likes.toLocaleString("ko-KR")}
-          </span>
+            {like.count.toLocaleString("ko-KR")}
+          </button>
         </div>
       </div>
     </div>

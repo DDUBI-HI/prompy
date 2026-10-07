@@ -35,7 +35,7 @@ export default async function Header() {
             탐색
           </Link>
           <Link
-            href="/"
+            href="/?sort=popular"
             className="rounded-full px-4 py-2 text-sm font-semibold text-neutral-700 hover:bg-black/5 dark:text-neutral-300 dark:hover:bg-white/10"
           >
             인기

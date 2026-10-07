@@ -4,7 +4,8 @@ import type { Metadata } from "next";
 import Header from "@/components/Header";
 import CopyButton from "@/components/CopyButton";
 import SaveButton from "@/components/SaveButton";
-import { getPrompt, getSavedPromptIds } from "@/lib/prompts";
+import LikeButton from "@/components/LikeButton";
+import { getPrompt, getSavedPromptIds, getLikedPromptIds } from "@/lib/prompts";
 
 export async function generateMetadata({
   params,
@@ -29,8 +30,12 @@ export default async function PromptPage({
   const prompt = await getPrompt(id);
   if (!prompt) notFound();
 
-  const savedIds = await getSavedPromptIds();
+  const [savedIds, likedIds] = await Promise.all([
+    getSavedPromptIds(),
+    getLikedPromptIds(),
+  ]);
   const isSaved = savedIds.has(prompt.id);
+  const isLiked = likedIds.has(prompt.id);
 
   return (
     <>
@@ -66,17 +71,13 @@ export default async function PromptPage({
 
           {/* 오른쪽: 프롬프트 정보 */}
           <div className="flex flex-col gap-5 p-6 md:p-8">
-            {/* 상단: 저장 + 통계 */}
+            {/* 상단: 좋아요 + 저장 */}
             <div className="flex items-center justify-between">
-              <span className="flex items-center gap-3 text-sm text-neutral-500">
-                <span className="flex items-center gap-1">
-                  <svg className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden>
-                    <path d="M10 17.5 3.8 11.3a3.9 3.9 0 0 1 5.5-5.5l.7.7.7-.7a3.9 3.9 0 1 1 5.5 5.5L10 17.5Z" />
-                  </svg>
-                  {prompt.likes.toLocaleString("ko-KR")}
-                </span>
-                <span>저장 {prompt.saves.toLocaleString("ko-KR")}</span>
-              </span>
+              <LikeButton
+                promptId={prompt.id}
+                initialLiked={isLiked}
+                initialCount={prompt.likes}
+              />
               <SaveButton promptId={prompt.id} initialSaved={isSaved} />
             </div>
 
