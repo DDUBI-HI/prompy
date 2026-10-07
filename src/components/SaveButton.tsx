@@ -15,10 +15,10 @@ export default function SaveButton({
     <button
       onClick={toggle}
       disabled={loading}
-      className={`rounded-full px-6 py-3 text-sm font-bold text-white transition disabled:opacity-60 ${
+      className={`rounded-full px-6 py-3 text-sm font-bold transition disabled:opacity-60 ${
         saved
-          ? "bg-neutral-900 hover:bg-neutral-800"
-          : "bg-rose-600 hover:bg-rose-700"
+          ? "border border-black/15 text-neutral-700 hover:bg-black/5 dark:border-white/20 dark:text-neutral-200 dark:hover:bg-white/10"
+          : "bg-neutral-900 text-white hover:bg-neutral-700 dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200"
       }`}
     >
       {saved ? "저장됨" : "저장"}

@@ -128,7 +128,7 @@ export default function UploadForm({
   }
 
   const inputCls =
-    "w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-rose-400 dark:border-white/15 dark:bg-neutral-900";
+    "w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-neutral-400 dark:border-white/15 dark:bg-neutral-900";
 
   return (
     <main className="mx-auto max-w-2xl px-4 py-8">
@@ -142,7 +142,7 @@ export default function UploadForm({
           </label>
           <div
             onClick={() => fileRef.current?.click()}
-            className="flex min-h-56 cursor-pointer items-center justify-center overflow-hidden rounded-2xl border-2 border-dashed border-black/15 bg-neutral-50 transition hover:border-rose-400 dark:border-white/15 dark:bg-neutral-900"
+            className="flex min-h-56 cursor-pointer items-center justify-center overflow-hidden rounded-2xl border-2 border-dashed border-black/15 bg-neutral-50 transition hover:border-neutral-400 dark:border-white/15 dark:bg-neutral-900"
           >
             {preview ? (
               // eslint-disable-next-line @next/next/no-img-element
@@ -252,7 +252,7 @@ export default function UploadForm({
         <button
           type="submit"
           disabled={loading}
-          className="mt-2 rounded-full bg-rose-600 px-6 py-3.5 text-sm font-bold text-white transition hover:bg-rose-700 disabled:opacity-60"
+          className="mt-2 rounded-full bg-neutral-900 px-6 py-3.5 text-sm font-bold text-white transition hover:bg-neutral-700 disabled:opacity-60 dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200"
         >
           {loading ? "올리는 중…" : "프롬프트 올리기"}
         </button>

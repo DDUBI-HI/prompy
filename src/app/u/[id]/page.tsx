@@ -83,7 +83,7 @@ export default async function ProfilePage({
 
         {/* 올린 프롬프트 */}
         {prompts.length > 0 ? (
-          <div className="columns-2 gap-4 sm:columns-3 lg:columns-4 xl:columns-5">
+          <div className="grid grid-cols-2 gap-x-4 gap-y-7 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
             {prompts.map((p) => (
               <PromptCard
                 key={p.id}

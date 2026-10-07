@@ -38,7 +38,7 @@ export default async function SavedPage() {
         </p>
 
         {prompts.length > 0 ? (
-          <div className="columns-2 gap-4 sm:columns-3 lg:columns-4 xl:columns-5">
+          <div className="grid grid-cols-2 gap-x-4 gap-y-7 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
             {prompts.map((p) => (
               <PromptCard key={p.id} prompt={p} saved />
             ))}
@@ -51,7 +51,7 @@ export default async function SavedPage() {
             </p>
             <Link
               href="/"
-              className="mt-2 rounded-full bg-rose-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-rose-700"
+              className="mt-2 rounded-full bg-neutral-900 px-5 py-2.5 text-sm font-semibold text-white hover:bg-neutral-700 dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200"
             >
               둘러보러 가기
             </Link>

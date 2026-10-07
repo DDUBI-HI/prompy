@@ -26,7 +26,7 @@ export default function PromptCard({
       setCopied(true);
       setTimeout(() => setCopied(false), 1500);
     } catch {
-      // 클립보드 접근 실패 시 조용히 무시 (M2에서 폴백 처리)
+      /* 클립보드 접근 실패 시 무시 */
     }
   }
 
@@ -36,87 +36,90 @@ export default function PromptCard({
   }
 
   return (
-    <div className="group mb-4 break-inside-avoid">
-      <Link href={`/prompt/${prompt.id}`} className="block">
-        {/* 이미지 + 호버 오버레이 */}
-        <div className="relative overflow-hidden rounded-2xl bg-neutral-100 dark:bg-neutral-800">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={prompt.imageUrl}
-            alt={prompt.title}
-            loading="lazy"
-            className="w-full object-cover transition duration-300 group-hover:scale-[1.02]"
-          />
+    <div className="group">
+      {/* 정사각 이미지 (1:1) */}
+      <Link
+        href={`/prompt/${prompt.id}`}
+        className="relative block aspect-square overflow-hidden rounded-2xl bg-neutral-100 dark:bg-neutral-800"
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={prompt.imageUrl}
+          alt={prompt.title}
+          loading="lazy"
+          className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+        />
 
-          {/* 어둡게 덮는 오버레이 */}
-          <div className="pointer-events-none absolute inset-0 bg-black/0 transition group-hover:bg-black/25" />
+        {/* 호버 오버레이 */}
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 transition group-hover:opacity-100" />
 
-          {/* 저장 버튼 (우상단) */}
-          <button
-            onClick={handleSave}
-            disabled={loading}
-            className={`absolute right-3 top-3 rounded-full px-4 py-2 text-sm font-bold text-white opacity-0 shadow-lg transition group-hover:opacity-100 disabled:opacity-60 ${
-              saved ? "bg-neutral-900" : "bg-rose-600 hover:bg-rose-700"
-            }`}
-          >
-            {saved ? "저장됨" : "저장"}
-          </button>
+        {/* 저장 (우상단) */}
+        <button
+          onClick={handleSave}
+          disabled={loading}
+          className={`absolute right-2.5 top-2.5 rounded-full px-3.5 py-1.5 text-xs font-bold opacity-0 shadow-sm backdrop-blur transition group-hover:opacity-100 disabled:opacity-50 ${
+            saved
+              ? "bg-white/95 text-neutral-900"
+              : "bg-neutral-900/80 text-white hover:bg-neutral-900"
+          }`}
+        >
+          {saved ? "저장됨" : "저장"}
+        </button>
 
-          {/* 복사 버튼 (하단) */}
-          <button
-            onClick={handleCopy}
-            className="absolute bottom-3 left-3 right-3 rounded-full bg-white/95 px-4 py-2.5 text-sm font-semibold text-neutral-900 opacity-0 shadow-lg backdrop-blur transition hover:bg-white group-hover:opacity-100"
-          >
-            {copied ? "✓ 복사됨!" : "프롬프트 복사"}
-          </button>
-
-          {/* 모델 배지 (좌상단) */}
-          <span className="absolute left-3 top-3 rounded-full bg-black/60 px-2.5 py-1 text-xs font-semibold text-white backdrop-blur">
-            {prompt.model}
-          </span>
-        </div>
+        {/* 복사 (하단) */}
+        <button
+          onClick={handleCopy}
+          className="absolute bottom-2.5 left-2.5 right-2.5 rounded-full bg-white/95 px-3 py-2 text-xs font-semibold text-neutral-900 opacity-0 shadow-sm backdrop-blur transition hover:bg-white group-hover:opacity-100"
+        >
+          {copied ? "✓ 복사됨" : "프롬프트 복사"}
+        </button>
       </Link>
 
-      {/* 제목 + 메타 */}
-      <div className="px-1 pt-2">
-        <h3 className="line-clamp-2 text-sm font-semibold leading-snug">
+      {/* 정보 */}
+      <div className="px-0.5 pt-2.5">
+        <h3 className="line-clamp-1 text-sm font-semibold leading-snug text-neutral-900 dark:text-neutral-100">
           {prompt.title}
         </h3>
+        <p className="mt-0.5 text-xs text-neutral-400">{prompt.model}</p>
+
         <div className="mt-2 flex items-center justify-between">
           {prompt.author.id ? (
             <Link
               href={`/u/${prompt.author.id}`}
-              className="flex items-center gap-2 hover:underline"
+              className="flex min-w-0 items-center gap-1.5 hover:opacity-70"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={prompt.author.avatarUrl}
                 alt={prompt.author.name}
-                className="h-6 w-6 rounded-full object-cover"
+                className="h-5 w-5 shrink-0 rounded-full object-cover"
               />
-              <span className="text-xs text-neutral-600 dark:text-neutral-400">
+              <span className="truncate text-xs text-neutral-500 dark:text-neutral-400">
                 {prompt.author.name}
               </span>
             </Link>
           ) : (
-            <div className="flex items-center gap-2">
+            <div className="flex min-w-0 items-center gap-1.5">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={prompt.author.avatarUrl}
                 alt={prompt.author.name}
-                className="h-6 w-6 rounded-full object-cover"
+                className="h-5 w-5 shrink-0 rounded-full object-cover"
               />
-              <span className="text-xs text-neutral-600 dark:text-neutral-400">
+              <span className="truncate text-xs text-neutral-500 dark:text-neutral-400">
                 {prompt.author.name}
               </span>
             </div>
           )}
+
           <button
             onClick={like.toggle}
             disabled={like.loading}
             aria-label="좋아요"
-            className={`flex items-center gap-1 text-xs transition hover:scale-110 disabled:opacity-60 ${
-              like.liked ? "text-rose-600" : "text-neutral-500 hover:text-rose-500"
+            className={`flex shrink-0 items-center gap-1 text-xs transition active:scale-90 disabled:opacity-50 ${
+              like.liked
+                ? "text-rose-500"
+                : "text-neutral-400 hover:text-rose-400"
             }`}
           >
             <svg

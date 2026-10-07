@@ -52,7 +52,7 @@ export default function LoginPage() {
   return (
     <main className="mx-auto flex min-h-screen max-w-md flex-col justify-center px-6 py-12">
       <Link href="/" className="mb-8 flex items-center justify-center gap-2">
-        <span className="flex h-10 w-10 items-center justify-center rounded-full bg-rose-600 text-xl font-black text-white">
+        <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-neutral-900 text-xl font-black text-white dark:bg-white dark:text-neutral-900">
           P
         </span>
         <span className="text-2xl font-bold tracking-tight">프롬피</span>
@@ -72,7 +72,7 @@ export default function LoginPage() {
           둘러보기만 가능해요.
           <Link
             href="/"
-            className="mt-3 block font-semibold text-rose-600 hover:underline"
+            className="mt-3 block font-semibold text-neutral-900 hover:underline dark:text-white"
           >
             둘러보기로 돌아가기 →
           </Link>
@@ -86,7 +86,7 @@ export default function LoginPage() {
               placeholder="이메일"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="rounded-xl border border-black/10 bg-white px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-rose-400 dark:border-white/15 dark:bg-neutral-900"
+              className="rounded-xl border border-black/10 bg-white px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-neutral-400 dark:border-white/15 dark:bg-neutral-900"
             />
             <input
               type="password"
@@ -95,7 +95,7 @@ export default function LoginPage() {
               placeholder="비밀번호 (6자 이상)"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="rounded-xl border border-black/10 bg-white px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-rose-400 dark:border-white/15 dark:bg-neutral-900"
+              className="rounded-xl border border-black/10 bg-white px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-neutral-400 dark:border-white/15 dark:bg-neutral-900"
             />
 
             {error && <p className="text-sm text-rose-600">{error}</p>}
@@ -106,7 +106,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="mt-1 rounded-full bg-rose-600 px-5 py-3 text-sm font-bold text-white transition hover:bg-rose-700 disabled:opacity-60"
+              className="mt-1 rounded-full bg-neutral-900 px-5 py-3 text-sm font-bold text-white transition hover:bg-neutral-700 disabled:opacity-60 dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200"
             >
               {loading
                 ? "처리 중…"

@@ -47,7 +47,7 @@ export default async function Home({
               scroll={false}
               className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
                 sortOpt === key
-                  ? "bg-rose-600 text-white"
+                  ? "bg-neutral-900 text-white dark:bg-white dark:text-neutral-900"
                   : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700"
               }`}
             >
@@ -92,7 +92,7 @@ export default async function Home({
         )}
 
         {prompts.length > 0 ? (
-          <div className="columns-2 gap-4 sm:columns-3 lg:columns-4 xl:columns-5">
+          <div className="grid grid-cols-2 gap-x-4 gap-y-7 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
             {prompts.map((p) => (
               <PromptCard
                 key={p.id}

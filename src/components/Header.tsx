@@ -20,7 +20,7 @@ export default async function Header() {
     <header className="sticky top-0 z-50 border-b border-black/5 bg-white/80 backdrop-blur-md dark:border-white/10 dark:bg-neutral-950/80">
       <div className="mx-auto flex h-16 max-w-screen-2xl items-center gap-3 px-4">
         <Link href="/" className="flex shrink-0 items-center gap-2">
-          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-rose-600 text-lg font-black text-white">
+          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-neutral-900 text-lg font-black text-white dark:bg-white dark:text-neutral-900">
             P
           </span>
           <span className="hidden text-xl font-bold tracking-tight sm:block">
@@ -55,7 +55,7 @@ export default async function Header() {
             </Link>
             <Link
               href="/upload"
-              className="rounded-full bg-rose-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-rose-700"
+              className="rounded-full bg-neutral-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-neutral-700 dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200"
             >
               업로드
             </Link>
@@ -71,7 +71,7 @@ export default async function Header() {
         ) : (
           <Link
             href="/login"
-            className="shrink-0 rounded-full bg-rose-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-rose-700"
+            className="shrink-0 rounded-full bg-neutral-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-neutral-700 dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200"
           >
             로그인
           </Link>

@@ -16,7 +16,7 @@ export default function SearchBar() {
 
   return (
     <form onSubmit={submit} className="flex flex-1 items-center">
-      <label className="flex w-full items-center gap-2 rounded-full bg-neutral-100 px-4 py-2.5 focus-within:ring-2 focus-within:ring-rose-400 dark:bg-neutral-800">
+      <label className="flex w-full items-center gap-2 rounded-full bg-neutral-100 px-4 py-2.5 focus-within:ring-2 focus-within:ring-neutral-300 dark:bg-neutral-800 dark:focus-within:ring-neutral-600">
         <svg
           className="h-4 w-4 shrink-0 text-neutral-500"
           viewBox="0 0 20 20"
