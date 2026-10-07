@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Header from "@/components/Header";
 import PromptCard from "@/components/PromptCard";
-import { getPrompts } from "@/lib/prompts";
+import { getPrompts, getSavedPromptIds } from "@/lib/prompts";
 import { ALL, CATEGORY_CHIPS } from "@/lib/categories";
 
 export default async function Home({
@@ -12,7 +12,10 @@ export default async function Home({
   const { cat } = await searchParams;
   const active = cat && CATEGORY_CHIPS.includes(cat) ? cat : ALL;
 
-  const prompts = await getPrompts(active);
+  const [prompts, savedIds] = await Promise.all([
+    getPrompts(active),
+    getSavedPromptIds(),
+  ]);
 
   return (
     <>
@@ -47,7 +50,7 @@ export default async function Home({
         {prompts.length > 0 ? (
           <div className="columns-2 gap-4 sm:columns-3 lg:columns-4 xl:columns-5">
             {prompts.map((p) => (
-              <PromptCard key={p.id} prompt={p} />
+              <PromptCard key={p.id} prompt={p} saved={savedIds.has(p.id)} />
             ))}
           </div>
         ) : (

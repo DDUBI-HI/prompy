@@ -67,6 +67,12 @@ export default async function Header() {
         {user ? (
           <div className="flex shrink-0 items-center gap-2">
             <Link
+              href="/saved"
+              className="hidden rounded-full px-4 py-2 text-sm font-semibold text-neutral-700 hover:bg-black/5 sm:block dark:text-neutral-300 dark:hover:bg-white/10"
+            >
+              저장함
+            </Link>
+            <Link
               href="/upload"
               className="rounded-full bg-rose-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-rose-700"
             >

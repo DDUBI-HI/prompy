@@ -63,6 +63,48 @@ export async function getPrompts(category?: string): Promise<Prompt[]> {
   return (data as PromptRow[]).map(rowToPrompt);
 }
 
+/** 현재 로그인 사용자가 저장한 프롬프트 id 집합 (저장 버튼 상태 표시용) */
+export async function getSavedPromptIds(): Promise<Set<string>> {
+  if (!isSupabaseConfigured()) return new Set();
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return new Set();
+
+  const { data } = await supabase
+    .from("saves")
+    .select("prompt_id")
+    .eq("user_id", user.id);
+
+  return new Set((data ?? []).map((r) => r.prompt_id as string));
+}
+
+/** 내 저장함: 내가 저장한 프롬프트 목록 (최근 저장순) */
+export async function getSavedPrompts(): Promise<Prompt[]> {
+  if (!isSupabaseConfigured()) return [];
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return [];
+
+  const { data, error } = await supabase
+    .from("saves")
+    .select("created_at, prompt:prompts(*)")
+    .eq("user_id", user.id)
+    .order("created_at", { ascending: false });
+
+  if (error || !data) return [];
+
+  return data
+    .map((r) => (r.prompt as unknown as PromptRow | null))
+    .filter((p): p is PromptRow => Boolean(p))
+    .map(rowToPrompt);
+}
+
 /** 상세용 단일 프롬프트 */
 export async function getPrompt(id: string): Promise<Prompt | null> {
   if (!isSupabaseConfigured()) return getPromptById(id) ?? null;

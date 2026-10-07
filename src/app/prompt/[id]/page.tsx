@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 import Header from "@/components/Header";
 import CopyButton from "@/components/CopyButton";
 import SaveButton from "@/components/SaveButton";
-import { getPrompt } from "@/lib/prompts";
+import { getPrompt, getSavedPromptIds } from "@/lib/prompts";
 
 export async function generateMetadata({
   params,
@@ -28,6 +28,9 @@ export default async function PromptPage({
   const { id } = await params;
   const prompt = await getPrompt(id);
   if (!prompt) notFound();
+
+  const savedIds = await getSavedPromptIds();
+  const isSaved = savedIds.has(prompt.id);
 
   return (
     <>
@@ -74,7 +77,7 @@ export default async function PromptPage({
                 </span>
                 <span>저장 {prompt.saves.toLocaleString("ko-KR")}</span>
               </span>
-              <SaveButton />
+              <SaveButton promptId={prompt.id} initialSaved={isSaved} />
             </div>
 
             {/* 모델 배지 + 제목 */}

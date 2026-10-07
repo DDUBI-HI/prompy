@@ -3,10 +3,17 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Prompt } from "@/lib/types";
+import { useSavePrompt } from "@/lib/useSavePrompt";
 
-export default function PromptCard({ prompt }: { prompt: Prompt }) {
+export default function PromptCard({
+  prompt,
+  saved: initialSaved = false,
+}: {
+  prompt: Prompt;
+  saved?: boolean;
+}) {
   const [copied, setCopied] = useState(false);
-  const [saved, setSaved] = useState(false);
+  const { saved, loading, toggle } = useSavePrompt(prompt.id, initialSaved);
 
   async function handleCopy(e: React.MouseEvent) {
     e.preventDefault();
@@ -21,7 +28,7 @@ export default function PromptCard({ prompt }: { prompt: Prompt }) {
 
   function handleSave(e: React.MouseEvent) {
     e.preventDefault();
-    setSaved((s) => !s);
+    toggle();
   }
 
   return (
@@ -43,7 +50,8 @@ export default function PromptCard({ prompt }: { prompt: Prompt }) {
           {/* 저장 버튼 (우상단) */}
           <button
             onClick={handleSave}
-            className={`absolute right-3 top-3 rounded-full px-4 py-2 text-sm font-bold text-white opacity-0 shadow-lg transition group-hover:opacity-100 ${
+            disabled={loading}
+            className={`absolute right-3 top-3 rounded-full px-4 py-2 text-sm font-bold text-white opacity-0 shadow-lg transition group-hover:opacity-100 disabled:opacity-60 ${
               saved ? "bg-neutral-900" : "bg-rose-600 hover:bg-rose-700"
             }`}
           >
