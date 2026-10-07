@@ -83,17 +83,34 @@ export default function PromptCard({
           {prompt.title}
         </h3>
         <div className="mt-2 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={prompt.author.avatarUrl}
-              alt={prompt.author.name}
-              className="h-6 w-6 rounded-full object-cover"
-            />
-            <span className="text-xs text-neutral-600 dark:text-neutral-400">
-              {prompt.author.name}
-            </span>
-          </div>
+          {prompt.author.id ? (
+            <Link
+              href={`/u/${prompt.author.id}`}
+              className="flex items-center gap-2 hover:underline"
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={prompt.author.avatarUrl}
+                alt={prompt.author.name}
+                className="h-6 w-6 rounded-full object-cover"
+              />
+              <span className="text-xs text-neutral-600 dark:text-neutral-400">
+                {prompt.author.name}
+              </span>
+            </Link>
+          ) : (
+            <div className="flex items-center gap-2">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={prompt.author.avatarUrl}
+                alt={prompt.author.name}
+                className="h-6 w-6 rounded-full object-cover"
+              />
+              <span className="text-xs text-neutral-600 dark:text-neutral-400">
+                {prompt.author.name}
+              </span>
+            </div>
+          )}
           <button
             onClick={like.toggle}
             disabled={like.loading}

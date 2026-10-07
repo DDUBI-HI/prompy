@@ -2,6 +2,7 @@ import Link from "next/link";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
 import { createClient } from "@/lib/supabase/server";
 import SignOutButton from "./SignOutButton";
+import SearchBar from "./SearchBar";
 
 async function getUser() {
   if (!isSupabaseConfigured()) return null;
@@ -42,27 +43,7 @@ export default async function Header() {
           </Link>
         </nav>
 
-        <div className="flex flex-1 items-center">
-          <label className="flex w-full items-center gap-2 rounded-full bg-neutral-100 px-4 py-2.5 focus-within:ring-2 focus-within:ring-rose-400 dark:bg-neutral-800">
-            <svg
-              className="h-4 w-4 shrink-0 text-neutral-500"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-              aria-hidden
-            >
-              <path
-                fillRule="evenodd"
-                d="M9 3.5a5.5 5.5 0 1 0 2.9 10.17l3.21 3.22a1 1 0 0 0 1.42-1.42l-3.22-3.21A5.5 5.5 0 0 0 9 3.5ZM5.5 9a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0Z"
-                clipRule="evenodd"
-              />
-            </svg>
-            <input
-              type="search"
-              placeholder="프롬프트 검색 (예: 사이버펑크, 수채화…)"
-              className="w-full bg-transparent text-sm outline-none placeholder:text-neutral-500"
-            />
-          </label>
-        </div>
+        <SearchBar />
 
         {user ? (
           <div className="flex shrink-0 items-center gap-2">
@@ -78,12 +59,13 @@ export default async function Header() {
             >
               업로드
             </Link>
-            <span
-              className="hidden max-w-[10rem] truncate text-sm text-neutral-600 sm:block dark:text-neutral-400"
+            <Link
+              href={`/u/${user.id}`}
+              className="hidden max-w-[10rem] truncate text-sm font-medium text-neutral-600 hover:text-neutral-900 sm:block dark:text-neutral-400 dark:hover:text-white"
               title={user.email ?? ""}
             >
               {user.email}
-            </span>
+            </Link>
             <SignOutButton />
           </div>
         ) : (

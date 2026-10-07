@@ -24,6 +24,8 @@ export type Prompt = {
   aspect: "portrait" | "square" | "landscape";
   tags: string[];
   author: {
+    /** 작성자 user_id (실제 업로드만 있음, 시드/목업은 없음). 프로필 링크에 사용 */
+    id?: string | null;
     name: string;
     avatarUrl: string;
   };

@@ -8,14 +8,15 @@ import { ALL, CATEGORY_CHIPS } from "@/lib/categories";
 export default async function Home({
   searchParams,
 }: {
-  searchParams: Promise<{ cat?: string; sort?: string }>;
+  searchParams: Promise<{ cat?: string; sort?: string; q?: string }>;
 }) {
-  const { cat, sort } = await searchParams;
+  const { cat, sort, q } = await searchParams;
   const active = cat && CATEGORY_CHIPS.includes(cat) ? cat : ALL;
   const sortOpt: SortOption = sort === "popular" ? "popular" : "latest";
+  const query = q?.trim() ?? "";
 
   const [prompts, savedIds, likedIds] = await Promise.all([
-    getPrompts(active, sortOpt),
+    getPrompts(active, sortOpt, query),
     getSavedPromptIds(),
     getLikedPromptIds(),
   ]);
@@ -81,6 +82,15 @@ export default async function Home({
 
       {/* 메이슨리 피드 (CSS columns) */}
       <main className="mx-auto max-w-screen-2xl px-4 pb-16">
+        {query && (
+          <p className="mb-4 text-sm text-neutral-600 dark:text-neutral-400">
+            <b className="text-neutral-900 dark:text-white">
+              &lsquo;{query}&rsquo;
+            </b>{" "}
+            검색 결과 {prompts.length}개
+          </p>
+        )}
+
         {prompts.length > 0 ? (
           <div className="columns-2 gap-4 sm:columns-3 lg:columns-4 xl:columns-5">
             {prompts.map((p) => (
@@ -95,10 +105,14 @@ export default async function Home({
         ) : (
           <div className="flex flex-col items-center justify-center gap-2 py-24 text-center">
             <p className="text-lg font-semibold">
-              아직 &lsquo;{active}&rsquo; 프롬프트가 없어요
+              {query
+                ? `'${query}'에 대한 결과가 없어요`
+                : `아직 '${active}' 프롬프트가 없어요`}
             </p>
             <p className="text-sm text-neutral-500">
-              첫 프롬프트를 올려보세요. (업로드 기능은 곧 추가됩니다)
+              {query
+                ? "다른 검색어로 찾아보세요."
+                : "첫 프롬프트를 올려보세요."}
             </p>
           </div>
         )}

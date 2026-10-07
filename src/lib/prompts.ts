@@ -19,6 +19,7 @@ type PromptRow = {
   author_avatar: string;
   likes: number;
   saves: number;
+  user_id: string | null;
 };
 
 function rowToPrompt(r: PromptRow): Prompt {
@@ -32,26 +33,46 @@ function rowToPrompt(r: PromptRow): Prompt {
     imageUrl: r.image_url,
     aspect: r.aspect,
     tags: r.tags ?? [],
-    author: { name: r.author_name, avatarUrl: r.author_avatar },
+    author: {
+      id: r.user_id ?? null,
+      name: r.author_name,
+      avatarUrl: r.author_avatar,
+    },
     likes: r.likes,
     saves: r.saves,
   };
 }
 
-function filterMock(category?: string): Prompt[] {
-  if (!category || category === ALL) return mockPrompts;
-  return mockPrompts.filter((p) => p.category === category);
+function filterMock(category?: string, q?: string): Prompt[] {
+  let list = mockPrompts;
+  if (category && category !== ALL)
+    list = list.filter((p) => p.category === category);
+  if (q) {
+    const needle = q.toLowerCase();
+    list = list.filter(
+      (p) =>
+        p.title.toLowerCase().includes(needle) ||
+        p.body.toLowerCase().includes(needle) ||
+        p.description.toLowerCase().includes(needle) ||
+        p.model.toLowerCase().includes(needle) ||
+        p.tags.some((t) => t.toLowerCase().includes(needle))
+    );
+  }
+  return list;
 }
 
 export type SortOption = "latest" | "popular";
 
-/** 피드용 프롬프트 목록 (카테고리 필터 + 정렬 선택) */
+/** 피드용 프롬프트 목록 (카테고리 필터 + 정렬 + 검색어) */
 export async function getPrompts(
   category?: string,
-  sort: SortOption = "latest"
+  sort: SortOption = "latest",
+  q?: string
 ): Promise<Prompt[]> {
+  const search = q?.trim();
+
   if (!isSupabaseConfigured()) {
-    const list = filterMock(category);
+    const list = filterMock(category, search);
     return sort === "popular"
       ? [...list].sort((a, b) => b.likes - a.likes)
       : list;
@@ -67,11 +88,33 @@ export async function getPrompts(
 
   if (category && category !== ALL) query = query.eq("category", category);
 
+  if (search) {
+    const esc = search.replace(/[%,()]/g, " ");
+    query = query.or(
+      `title.ilike.%${esc}%,body.ilike.%${esc}%,description.ilike.%${esc}%,model.ilike.%${esc}%`
+    );
+  }
+
   const { data, error } = await query;
   if (error) {
     console.error("getPrompts 실패:", error.message);
-    return filterMock(category);
+    return filterMock(category, search);
   }
+  return (data as PromptRow[]).map(rowToPrompt);
+}
+
+/** 특정 사용자가 올린 프롬프트 (프로필 페이지용) */
+export async function getPromptsByUser(userId: string): Promise<Prompt[]> {
+  if (!isSupabaseConfigured()) return [];
+
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("prompts")
+    .select("*")
+    .eq("user_id", userId)
+    .order("created_at", { ascending: false });
+
+  if (error || !data) return [];
   return (data as PromptRow[]).map(rowToPrompt);
 }
 

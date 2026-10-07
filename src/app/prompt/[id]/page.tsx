@@ -92,15 +92,30 @@ export default async function PromptPage({
             </div>
 
             {/* 작성자 */}
-            <div className="flex items-center gap-2">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={prompt.author.avatarUrl}
-                alt={prompt.author.name}
-                className="h-8 w-8 rounded-full object-cover"
-              />
-              <span className="text-sm font-medium">{prompt.author.name}</span>
-            </div>
+            {prompt.author.id ? (
+              <Link
+                href={`/u/${prompt.author.id}`}
+                className="flex items-center gap-2 hover:underline"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={prompt.author.avatarUrl}
+                  alt={prompt.author.name}
+                  className="h-8 w-8 rounded-full object-cover"
+                />
+                <span className="text-sm font-medium">{prompt.author.name}</span>
+              </Link>
+            ) : (
+              <div className="flex items-center gap-2">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={prompt.author.avatarUrl}
+                  alt={prompt.author.name}
+                  className="h-8 w-8 rounded-full object-cover"
+                />
+                <span className="text-sm font-medium">{prompt.author.name}</span>
+              </div>
+            )}
 
             {/* 프롬프트 본문 + 복사 */}
             <div>
